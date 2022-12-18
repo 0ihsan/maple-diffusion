@@ -9,6 +9,7 @@ struct ContentView: View {
     let dispatchQueue = DispatchQueue(label: "Generation")
     @State var steps: Float = 20
     @State var image: Image?
+    @State var cgimage: CGImage?
     @State var prompt: String = ""
     @State var negativePrompt: String = ""
     @State var guidanceScale: Float = 7.5
@@ -26,6 +27,12 @@ struct ContentView: View {
             running = false
         }
     }
+  
+    func writeImageToPasteboard(img: NSImage) {
+        let pb = NSPasteboard.general
+        pb.clearContents()
+        pb.writeObjects([img])
+    }
     
     func generate() {
         dispatchQueue.async {
@@ -34,6 +41,7 @@ struct ContentView: View {
             progressProp = 0
             mapleDiffusion.generate(prompt: prompt, negativePrompt: negativePrompt, seed: Int.random(in: 1..<Int.max), steps: Int(steps), guidanceScale: guidanceScale) { (cgim, p, s) -> () in
                 if (cgim != nil) {
+                    cgimage = cgim
                     image = Image(cgim!, scale: 1.0, label: Text("Generated image"))
                 }
                 progressProp = p
@@ -90,6 +98,18 @@ struct ContentView: View {
                     .font(Font.title)
                     .cornerRadius(32)
             }.buttonStyle(.borderless).disabled(running)
+#if os(macOS)
+          Button(action: {
+            writeImageToPasteboard(img: NSImage(cgImage: cgimage!, size: .zero))
+          }) {
+                Text("Copy Image To Clipboard")
+                    .frame(minWidth: 100, maxWidth: .infinity, minHeight: 64, alignment: .center)
+                    .background(running ? .gray : .blue)
+                    .foregroundColor(.white)
+                    .font(Font.title)
+                    .cornerRadius(32)
+            }.buttonStyle(.borderless).disabled(cgimage == nil && running)
+#endif
         }.padding(16).onAppear(perform: loadModels)
     }
 }
