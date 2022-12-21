@@ -60,3 +60,10 @@ To build and run Maple Diffusion:
 6. [Manually add](https://github.com/madebyollin/maple-diffusion/issues/5#issuecomment-1279111878) the `Increased Memory Limit` capability to the `maple-diffusion` target (this step might not be needed on iPads, but it's definitely needed on iPhones - the default limit is 3GB).
 
 7. Build & run the project on your device with the `Product > Run` menu.
+
+# Build for macOS without Xcode
+
+After converting the ckpt file to bins directory, run `make` to create an app.
+This will create a directior called `sd.app`.
+It created a simple app which you can copy to /Applications folder.
+It copies the bins (model) to the app's `Resources` directory so the app is standalone.

@@ -42,7 +42,7 @@ struct ContentView: View {
             mapleDiffusion.generate(prompt: prompt, negativePrompt: negativePrompt, seed: Int.random(in: 1..<Int.max), steps: Int(steps), guidanceScale: guidanceScale) { (cgim, p, s) -> () in
                 if (cgim != nil) {
                     cgimage = cgim
-                    image = Image(cgim!, scale: 1.0, label: Text("Generated image"))
+                    image = Image(cgim!, scale: 1.0, label: Text("generated image"))
                 }
                 progressProp = p
                 progressStage = s
@@ -53,17 +53,26 @@ struct ContentView: View {
     var body: some View {
         VStack {
 #if os(iOS)
-            Text("🍁 Maple Diffusion").foregroundColor(.orange).bold().frame(alignment: Alignment.center)
+            Text("🍁 maple diffusion").foregroundColor(.orange).bold().frame(alignment: Alignment.center)
 #endif
             if (image == nil) {
-                Rectangle().fill(.gray).aspectRatio(1.0, contentMode: .fit).frame(idealWidth: mapleDiffusion.width as? CGFloat, idealHeight: mapleDiffusion.height as? CGFloat)
+                Rectangle().fill(.gray).aspectRatio(1.0, contentMode: .fit)
+                    .frame(idealWidth: mapleDiffusion.width as? CGFloat, idealHeight: mapleDiffusion.height as? CGFloat)
+                    .cornerRadius(16)
+                    .padding()
             } else {
 #if os(iOS)
                 ShareLink(item: image!, preview: SharePreview(prompt, image: image!)) {
-                    image!.resizable().aspectRatio(contentMode: .fit).frame(idealWidth: mapleDiffusion.width as? CGFloat, idealHeight: mapleDiffusion.height as? CGFloat)
+                    image!.resizable().aspectRatio(contentMode: .fit)
+                    .frame(idealWidth: mapleDiffusion.width as? CGFloat, idealHeight: mapleDiffusion.height as? CGFloat)
+                    .cornerRadius(16)
+                    .padding()
                 }
 #else
-                image!.resizable().aspectRatio(contentMode: .fit).frame(idealWidth: mapleDiffusion.width as? CGFloat, idealHeight: mapleDiffusion.height as? CGFloat)
+                image!.resizable().aspectRatio(contentMode: .fit)
+                    .frame(idealWidth: mapleDiffusion.width as? CGFloat, idealHeight: mapleDiffusion.height as? CGFloat)
+                    .cornerRadius(16)
+                    .padding()
 #endif
             }
             HStack {
@@ -89,27 +98,22 @@ struct ContentView: View {
                 Slider(value: $steps, in: 5...150)
             }
             ProgressView(progressStage, value: progressProp, total: 1).opacity(running ? 1 : 0).foregroundColor(.secondary)
-            Spacer(minLength: 8)
-            Button(action: generate) {
-                Text("Generate Image")
-                    .frame(minWidth: 100, maxWidth: .infinity, minHeight: 64, alignment: .center)
-                    .background(running ? .gray : .blue)
-                    .foregroundColor(.white)
-                    .font(Font.title)
-                    .cornerRadius(32)
-            }.buttonStyle(.borderless).disabled(running)
+            Spacer(minLength: 6)
+            HStack {
+                Button(action: generate) { Text("generate image") }
+                    .disabled(running)
+                    .cornerRadius(6.0)
+                    .padding()
 #if os(macOS)
-          Button(action: {
-            writeImageToPasteboard(img: NSImage(cgImage: cgimage!, size: .zero))
-          }) {
-                Text("Copy Image To Clipboard")
-                    .frame(minWidth: 100, maxWidth: .infinity, minHeight: 64, alignment: .center)
-                    .background(running ? .gray : .blue)
-                    .foregroundColor(.white)
-                    .font(Font.title)
-                    .cornerRadius(32)
-            }.buttonStyle(.borderless).disabled(cgimage == nil && running)
+              Button(action: {
+                writeImageToPasteboard(img: NSImage(cgImage: cgimage!, size: .zero))
+              }) { Text("copy image to clipboard") }
+                 .disabled(cgimage == nil && running)
+                 .cornerRadius(6.0)
+                 .padding()
+
 #endif
+            }
         }.padding(16).onAppear(perform: loadModels)
     }
 }
