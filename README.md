@@ -4,6 +4,7 @@ Maple Diffusion runs Stable Diffusion models **locally** on macOS / iOS
 devices, in Swift, using the MPSGraph framework (not Python).
 
 ![](app.webp)
+<em align="center">[analog diffusion][analogdiffusion] running on base m1 macbook air.</em>
 
 - ~1.4s / step on an M1 MacBook Air (base).
 - ~2.3s / step on an iPhone 13 Pro
@@ -84,10 +85,11 @@ It copies the `bins/` (model) to the app's `Resources` directory so the app is s
   codebase with similar MPSGraph-based approach)
 
 [sd14]: https://huggingface.co/CompVis/stable-diffusion-v1-4
-[iosram]: https://blakespot.com/ios_device_specifications_grid.html
 [issue8]: https://github.com/madebyollin/maple-diffusion/issues/8
 [nativediffusion]: https://github.com/mortenjust/native-diffusion/
+[iosram]: https://blakespot.com/ios_device_specifications_grid.html
 [issue25]: https://github.com/madebyollin/maple-diffusion/issues/25
+[analogdiffusion]: https://huggingface.co/wavymulder/Analog-Diffusion 
 [waifuartai]: https://twitter.com/dgspitzer/status/1596652212964712449
 [intelpr]: https://github.com/madebyollin/maple-diffusion/pull/14#issuecomment-1282166802
 [drawthingsappstore]: https://apps.apple.com/us/app/draw-things-ai-generation/id6444050820
