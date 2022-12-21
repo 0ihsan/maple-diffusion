@@ -58,7 +58,10 @@ pip install torch typing_extensions numpy Pillow requests pytorch_lightning
 ```bash
 ./maple-convert.py ~/Downloads/sd-v1-4.ckpt
 ```
-5. Run `make` (for macOS).
+5. Run (for macOS)
+```sh
+make
+```
 
 This will create a directior called `sd.app`.
 It creates a simple app which you can copy to `/Applications` folder.
